@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from src.schemas import UserCreate, UserRead, UserLogin
 from src.repository import users as user_repo
 from src.database.db import get_db
+from src.auth_jwt import create_access_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -21,5 +22,6 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = user_repo.authenticate_user(db, user.email, user.password)
     if not db_user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    # JWT generation буде на наступному кроці
-    return {"msg": "Login successful (JWT will be added)"}
+    # Генеруємо JWT-токен
+    token = create_access_token({"sub": db_user.email, "user_id": db_user.id})
+    return {"access_token": token, "token_type": "bearer"}
