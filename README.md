@@ -1,4 +1,4 @@
-# goit-pythonweb-hw-08
+# goit-pythonweb-hw-10
 
 # FastAPI Contacts Management Application
 
@@ -66,30 +66,36 @@ The application will be available at http://localhost:8000
 1. Start PostgreSQL (make sure it's running locally)
 
 2. Create a `.env` file in the root directory with the following content:
+
 ```env
 DATABASE_URL=postgresql://YOUR_USERNAME@localhost:5432/contacts_db
 POSTGRES_USER=YOUR_USERNAME
 POSTGRES_PASSWORD=YOUR_PASSWORD
 POSTGRES_DB=contacts_db
 ```
+
 Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with your PostgreSQL credentials.
 
 3. Create the database:
+
 ```bash
 createdb contacts_db
 ```
 
 4. Activate the virtual environment:
+
 ```bash
 poetry shell
 ```
 
 5. Install dependencies:
+
 ```bash
 poetry install
 ```
 
 6. Run the application:
+
 ```bash
 poetry run uvicorn src.main:app --reload
 ```
