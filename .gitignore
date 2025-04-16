@@ -51,3 +51,12 @@ ENV/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Poetry
+poetry.lock
+.poetry/
+.python-version
+
+# Docker
+.docker/
+docker-compose.override.yml

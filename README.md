@@ -1,8 +1,17 @@
 # goit-pythonweb-hw-08
 
-# Contacts API
+# FastAPI Contacts Management Application
 
-A FastAPI-based REST API for managing contacts with PostgreSQL database.
+REST API application for managing contacts with FastAPI framework.
+
+## Technologies
+
+- Python 3.9+
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+- Poetry (dependency management)
+- Docker & Docker Compose
 
 ## Features
 
@@ -15,33 +24,80 @@ A FastAPI-based REST API for managing contacts with PostgreSQL database.
 
 ## Prerequisites
 
-- Python 3.12.1
-- PostgreSQL 14+
+- Python 3.9 or higher
+- Poetry
+- Docker and Docker Compose
 
 ## Installation
 
-1. Clone the repository
-2. Install dependencies:
+1. Clone the repository:
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/sandrey88/goit-pythonweb-hw-10.git
+cd goit-pythonweb-hw-10
 ```
 
-3. Configure PostgreSQL:
-
-   - Install PostgreSQL if not installed: `brew install postgresql@14`
-   - Start PostgreSQL service: `brew services start postgresql@14`
-   - Create a database: `createdb contacts_db`
-
-4. Run the application:
+2. Copy environment variables:
 
 ```bash
-uvicorn src.main:app --reload
+cp .env.example .env
+```
+
+Then edit `.env` with your settings.
+
+3. Install dependencies with Poetry:
+
+```bash
+poetry install
+```
+
+## Running the Application
+
+### Using Docker (recommended):
+
+```bash
+docker-compose up --build
+```
+
+The application will be available at http://localhost:8000
+
+### Using Poetry (local development):
+
+1. Start PostgreSQL (make sure it's running locally)
+
+2. Create a `.env` file in the root directory with the following content:
+```env
+DATABASE_URL=postgresql://YOUR_USERNAME@localhost:5432/contacts_db
+POSTGRES_USER=YOUR_USERNAME
+POSTGRES_PASSWORD=YOUR_PASSWORD
+POSTGRES_DB=contacts_db
+```
+Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with your PostgreSQL credentials.
+
+3. Create the database:
+```bash
+createdb contacts_db
+```
+
+4. Activate the virtual environment:
+```bash
+poetry shell
+```
+
+5. Install dependencies:
+```bash
+poetry install
+```
+
+6. Run the application:
+```bash
+poetry run uvicorn src.main:app --reload
 ```
 
 ## API Endpoints
 
 ### Contacts Management
+
 - `GET /contacts` - Get list of all contacts
 - `POST /contacts` - Create a new contact
 - `GET /contacts/{contact_id}` - Get a specific contact by ID
@@ -49,6 +105,7 @@ uvicorn src.main:app --reload
 - `DELETE /contacts/{contact_id}` - Delete a contact
 
 ### Search and Filtering
+
 - `GET /contacts/find?q={query}` - Search contacts by name, surname, or email
 - `GET /contacts/birthdays/next7days` - Get contacts with birthdays in the next 7 days
 
@@ -77,10 +134,10 @@ Example of valid contact data:
 
 ## API Documentation
 
-After running the application, visit:
+Once the application is running, you can access:
 
-- Swagger UI: `http://localhost:8000/docs` - Interactive documentation with the ability to test endpoints
-- ReDoc: `http://localhost:8000/redoc` - Alternative documentation with better readability
+- Swagger UI documentation at http://localhost:8000/docs
+- ReDoc documentation at http://localhost:8000/redoc
 
 ## Error Handling
 
