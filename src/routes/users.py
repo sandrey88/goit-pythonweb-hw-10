@@ -4,11 +4,18 @@ from src.schemas import UserCreate, UserRead, UserLogin
 from src.repository import users as user_repo
 from src.database.db import get_db
 from src.auth_jwt import create_access_token
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi import Limiter
+from fastapi import Request
+from src.limiter import limiter, REGISTER_LIMIT, ME_LIMIT
+from src.dependencies import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-def register(user: UserCreate, db: Session = Depends(get_db), background_tasks: BackgroundTasks = None):
+@limiter.limit(REGISTER_LIMIT)
+def register(request: Request, user: UserCreate, db: Session = Depends(get_db), background_tasks: BackgroundTasks = None):
     db_user = user_repo.get_user_by_email(db, user.email)
     if db_user:
         raise HTTPException(status_code=409, detail="User with this email already exists")
@@ -40,3 +47,8 @@ def verify_email(token: str, db: Session = Depends(get_db)):
     user.verification_token = None
     db.commit()
     return {"message": "Email successfully verified! You can now log in."}
+
+@router.get("/me")
+@limiter.limit(ME_LIMIT)
+def get_me(request: Request, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    return current_user
