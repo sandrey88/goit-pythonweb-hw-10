@@ -10,3 +10,4 @@ cloudinary==1.44.0
 fastapi-mail==1.4.2
 passlib==1.7.4
 python-jose[cryptography]==3.3.0
+python-multipart==0.0.9
