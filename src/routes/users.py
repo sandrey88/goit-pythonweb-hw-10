@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Form, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, Form, BackgroundTasks, UploadFile, File
 from sqlalchemy.orm import Session
 from src.schemas import UserCreate, UserRead, UserLogin
 from src.repository import users as user_repo
@@ -10,6 +10,7 @@ from slowapi import Limiter
 from fastapi import Request
 from src.limiter import limiter, REGISTER_LIMIT, ME_LIMIT
 from src.dependencies import get_current_user
+from src.services.cloudinary_service import upload_avatar
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -52,3 +53,15 @@ def verify_email(token: str, db: Session = Depends(get_db)):
 @limiter.limit(ME_LIMIT)
 def get_me(request: Request, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     return current_user
+
+@router.patch("/avatar", response_model=UserRead)
+def update_avatar(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+    file: UploadFile = File(...)
+):
+    # Upload to Cloudinary
+    result = upload_avatar(file.file, public_id=f"user_{current_user.id}")
+    avatar_url = result.get("secure_url")
+    user = user_repo.update_user_avatar(db, current_user.id, avatar_url)
+    return user

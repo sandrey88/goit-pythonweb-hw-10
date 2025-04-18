@@ -13,7 +13,7 @@ class UserRead(UserBase):
     id: int
     is_verified: bool
     verification_token: Optional[str] = None
-    avatar: Optional[str] = None
+    avatar_url: Optional[str] = None
     created_at: Optional[datetime] = None
 
     class Config:

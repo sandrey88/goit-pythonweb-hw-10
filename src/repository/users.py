@@ -62,7 +62,7 @@ def authenticate_user(db: Session, email: str, password: str):
 def update_user_avatar(db: Session, user_id: int, avatar_url: str):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
-        user.avatar = avatar_url
+        user.avatar_url = avatar_url
         db.commit()
         db.refresh(user)
     return user
