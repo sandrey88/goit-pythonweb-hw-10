@@ -46,13 +46,13 @@ def get_upcoming_birthdays(db: Session):
     today = date.today()
     seven_days_later = today + timedelta(days=7)
     
-    # Getting the day and month for comparison
+    # Extracting the day and month for comparison
     today_month = today.month
     today_day = today.day
     end_month = seven_days_later.month
     end_day = seven_days_later.day
     
-    # If the period does not cross the next month
+    # If the period does not cross into the next month
     if today_month == end_month:
         contacts = db.query(Contact).filter(
             and_(
@@ -62,7 +62,7 @@ def get_upcoming_birthdays(db: Session):
             )
         ).all()
     else:
-        # If the period crosses the next month
+        # If the period crosses into the next month
         contacts = db.query(Contact).filter(
             or_(
                 and_(

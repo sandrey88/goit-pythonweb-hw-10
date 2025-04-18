@@ -16,7 +16,7 @@ def create_contact(contact: ContactCreate, db: Session = Depends(get_db), curren
 @router.get("/", response_model=List[Contact])
 def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     contacts = repository.get_contacts(db, skip=skip, limit=limit)
-    # Only return contacts owned by the current user
+    # Only return contacts that belong to the current user
     return [c for c in contacts if c.user_id == current_user.id]
 
 @router.get("/birthdays/next7days", response_model=List[Contact])

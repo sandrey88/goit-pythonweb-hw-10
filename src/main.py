@@ -12,10 +12,6 @@ app = FastAPI(title="Contacts API")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# WARNING: Drop and recreate all tables for development reset
-Base.metadata.drop_all(bind=engine)
-Base.metadata.create_all(bind=engine)
-
 origins = [
     "http://localhost:3000"
 ]
